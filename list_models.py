@@ -92,8 +92,8 @@ class ModelDiscovery:
                         
                 self.model_definitions.append(str(rel_path))
                 
-        except Exception as e:
-            # Silently skip files that can't be read
+        except (UnicodeDecodeError, PermissionError, OSError):
+            # Skip files that can't be read due to encoding issues or permissions
             pass
             
     def _extract_model_info(self, content: str, file_path: Path) -> List[str]:
@@ -140,8 +140,10 @@ class ModelDiscovery:
             info.append("Architecture: Recurrent Neural Network (RNN)")
             
         # Extract model architecture comments/docstrings
+        # Search in first 5000 characters to avoid performance issues
+        content_sample = content[:5000]
         arch_pattern = r'(?:"""|\'\'\')(.*?model.*?)(?:"""|\'\'\')'
-        architectures = re.findall(arch_pattern, content, re.IGNORECASE | re.DOTALL)
+        architectures = re.findall(arch_pattern, content_sample, re.IGNORECASE | re.DOTALL)
         for arch in architectures[:1]:  # Only show first one
             arch_clean = ' '.join(arch.split()[:20])  # First 20 words
             if len(arch_clean) > 10:

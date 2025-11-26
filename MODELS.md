@@ -37,7 +37,7 @@ This will scan the repository and display:
   - Framework: scikit-learn
   - Algorithm: SVM with SVC
   
-- **Gaussion NB.py** - Gaussian Naive Bayes classifier
+- **Gaussian NB.py** - Gaussian Naive Bayes classifier
   - Framework: scikit-learn
   - Algorithm: Gaussian Naive Bayes
   
