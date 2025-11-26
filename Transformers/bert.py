@@ -8,6 +8,12 @@ class MultiHeadAttention(nn.Module):
     
     def __init__(self, hidden_size, num_attention_heads, dropout_prob=0.1):
         super(MultiHeadAttention, self).__init__()
+        if hidden_size <= 0:
+            raise ValueError(f"Hidden size must be positive, got {hidden_size}")
+        if num_attention_heads <= 0:
+            raise ValueError(f"Number of attention heads must be positive, got {num_attention_heads}")
+        if not 0.0 <= dropout_prob <= 1.0:
+            raise ValueError(f"Dropout probability must be in [0.0, 1.0], got {dropout_prob}")
         if hidden_size % num_attention_heads != 0:
             raise ValueError(
                 f"Hidden size ({hidden_size}) must be divisible by number of attention heads ({num_attention_heads})"
@@ -21,7 +27,7 @@ class MultiHeadAttention(nn.Module):
         self.value = nn.Linear(hidden_size, self.all_head_size)
         
         self.dropout = nn.Dropout(dropout_prob)
-        self.dense = nn.Linear(hidden_size, hidden_size)
+        self.dense = nn.Linear(self.all_head_size, hidden_size)
         
     def transpose_for_scores(self, x):
         """Reshape tensor for multi-head attention"""
@@ -168,7 +174,7 @@ class BERTPooler(nn.Module):
 
 
 class BERT(nn.Module):
-    """BERT Model for pre-training"""
+    """Base BERT Model"""
     
     def __init__(self, vocab_size, hidden_size=768, num_layers=12, 
                  num_attention_heads=12, intermediate_size=3072, 
