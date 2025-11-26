@@ -70,6 +70,12 @@ class FeedForward(nn.Module):
     
     def __init__(self, hidden_size, intermediate_size, dropout_prob=0.1):
         super(FeedForward, self).__init__()
+        if hidden_size <= 0:
+            raise ValueError(f"Hidden size must be positive, got {hidden_size}")
+        if intermediate_size <= 0:
+            raise ValueError(f"Intermediate size must be positive, got {intermediate_size}")
+        if not 0.0 <= dropout_prob <= 1.0:
+            raise ValueError(f"Dropout probability must be in [0.0, 1.0], got {dropout_prob}")
         self.dense1 = nn.Linear(hidden_size, intermediate_size)
         self.dense2 = nn.Linear(intermediate_size, hidden_size)
         self.dropout = nn.Dropout(dropout_prob)
@@ -87,10 +93,18 @@ class TransformerEncoderLayer(nn.Module):
     
     def __init__(self, hidden_size, num_attention_heads, intermediate_size, dropout_prob=0.1):
         super(TransformerEncoderLayer, self).__init__()
+        if hidden_size <= 0:
+            raise ValueError(f"Hidden size must be positive, got {hidden_size}")
+        if num_attention_heads <= 0:
+            raise ValueError(f"Number of attention heads must be positive, got {num_attention_heads}")
+        if intermediate_size <= 0:
+            raise ValueError(f"Intermediate size must be positive, got {intermediate_size}")
+        if not 0.0 <= dropout_prob <= 1.0:
+            raise ValueError(f"Dropout probability must be in [0.0, 1.0], got {dropout_prob}")
         self.attention = MultiHeadAttention(hidden_size, num_attention_heads, dropout_prob)
         self.feed_forward = FeedForward(hidden_size, intermediate_size, dropout_prob)
-        self.layer_norm1 = nn.LayerNorm(hidden_size, eps=1e-12)
-        self.layer_norm2 = nn.LayerNorm(hidden_size, eps=1e-12)
+        self.layer_norm1 = nn.LayerNorm(hidden_size, eps=1e-5)
+        self.layer_norm2 = nn.LayerNorm(hidden_size, eps=1e-5)
         self.dropout = nn.Dropout(dropout_prob)
         
     def forward(self, hidden_states, attention_mask=None):
@@ -113,11 +127,21 @@ class BERTEmbeddings(nn.Module):
     def __init__(self, vocab_size, hidden_size, max_position_embeddings=512, 
                  type_vocab_size=2, dropout_prob=0.1):
         super(BERTEmbeddings, self).__init__()
+        if vocab_size <= 0:
+            raise ValueError(f"Vocabulary size must be positive, got {vocab_size}")
+        if hidden_size <= 0:
+            raise ValueError(f"Hidden size must be positive, got {hidden_size}")
+        if max_position_embeddings <= 0:
+            raise ValueError(f"Max position embeddings must be positive, got {max_position_embeddings}")
+        if type_vocab_size <= 0:
+            raise ValueError(f"Type vocab size must be positive, got {type_vocab_size}")
+        if not 0.0 <= dropout_prob <= 1.0:
+            raise ValueError(f"Dropout probability must be in [0.0, 1.0], got {dropout_prob}")
         self.token_embeddings = nn.Embedding(vocab_size, hidden_size, padding_idx=0)
         self.position_embeddings = nn.Embedding(max_position_embeddings, hidden_size)
         self.token_type_embeddings = nn.Embedding(type_vocab_size, hidden_size)
         
-        self.layer_norm = nn.LayerNorm(hidden_size, eps=1e-12)
+        self.layer_norm = nn.LayerNorm(hidden_size, eps=1e-5)
         self.dropout = nn.Dropout(dropout_prob)
         
     def forward(self, input_ids, token_type_ids=None):
@@ -145,6 +169,16 @@ class BERTEncoder(nn.Module):
     def __init__(self, num_layers, hidden_size, num_attention_heads, 
                  intermediate_size, dropout_prob=0.1):
         super(BERTEncoder, self).__init__()
+        if num_layers <= 0:
+            raise ValueError(f"Number of layers must be positive, got {num_layers}")
+        if hidden_size <= 0:
+            raise ValueError(f"Hidden size must be positive, got {hidden_size}")
+        if num_attention_heads <= 0:
+            raise ValueError(f"Number of attention heads must be positive, got {num_attention_heads}")
+        if intermediate_size <= 0:
+            raise ValueError(f"Intermediate size must be positive, got {intermediate_size}")
+        if not 0.0 <= dropout_prob <= 1.0:
+            raise ValueError(f"Dropout probability must be in [0.0, 1.0], got {dropout_prob}")
         self.layers = nn.ModuleList([
             TransformerEncoderLayer(hidden_size, num_attention_heads, 
                                    intermediate_size, dropout_prob)
@@ -162,6 +196,8 @@ class BERTPooler(nn.Module):
     
     def __init__(self, hidden_size):
         super(BERTPooler, self).__init__()
+        if hidden_size <= 0:
+            raise ValueError(f"Hidden size must be positive, got {hidden_size}")
         self.dense = nn.Linear(hidden_size, hidden_size)
         self.activation = nn.Tanh()
         
@@ -227,6 +263,8 @@ class BERTForMaskedLM(nn.Module):
     
     def __init__(self, bert_model, vocab_size):
         super(BERTForMaskedLM, self).__init__()
+        if vocab_size <= 0:
+            raise ValueError(f"Vocab size must be positive, got {vocab_size}")
         self.bert = bert_model
         self.mlm_head = nn.Linear(bert_model.hidden_size, vocab_size)
         

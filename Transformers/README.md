@@ -144,7 +144,7 @@ model = BERT(
 ## Requirements
 
 ```
-torch>=1.7.0
+torch>=2.0.0
 ```
 
 ## References

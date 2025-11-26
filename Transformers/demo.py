@@ -93,7 +93,7 @@ def demo_bert_pretraining():
     print()
 
 
-def demo_attention_visualization():
+def demo_attention_mechanism():
     """Demo showing attention mechanism works"""
     print("=" * 60)
     print("Demo: Attention Mechanism")
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     # Run demos
     demo_basic_bert()
     demo_bert_pretraining()
-    demo_attention_visualization()
+    demo_attention_mechanism()
     demo_model_components()
     
     print("=" * 60)
