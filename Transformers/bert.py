@@ -181,6 +181,16 @@ class BERT(nn.Module):
                  max_position_embeddings=512, type_vocab_size=2, dropout_prob=0.1):
         super(BERT, self).__init__()
         
+        # Validate parameters
+        if vocab_size <= 0:
+            raise ValueError(f"Vocabulary size must be positive, got {vocab_size}")
+        if num_layers <= 0:
+            raise ValueError(f"Number of layers must be positive, got {num_layers}")
+        if max_position_embeddings <= 0:
+            raise ValueError(f"Max position embeddings must be positive, got {max_position_embeddings}")
+        if type_vocab_size <= 0:
+            raise ValueError(f"Type vocab size must be positive, got {type_vocab_size}")
+        
         self.hidden_size = hidden_size
         self.embeddings = BERTEmbeddings(vocab_size, hidden_size, 
                                         max_position_embeddings, 
@@ -248,6 +258,7 @@ class BERTForPreTraining(nn.Module):
                  max_position_embeddings=512, type_vocab_size=2, dropout_prob=0.1):
         super(BERTForPreTraining, self).__init__()
         
+        # Parameter validation is handled by the BERT class
         self.bert = BERT(vocab_size, hidden_size, num_layers, num_attention_heads,
                         intermediate_size, max_position_embeddings, type_vocab_size, dropout_prob)
         
