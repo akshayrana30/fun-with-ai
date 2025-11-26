@@ -8,6 +8,10 @@ class MultiHeadAttention(nn.Module):
     
     def __init__(self, hidden_size, num_attention_heads, dropout_prob=0.1):
         super(MultiHeadAttention, self).__init__()
+        if hidden_size % num_attention_heads != 0:
+            raise ValueError(
+                f"Hidden size ({hidden_size}) must be divisible by number of attention heads ({num_attention_heads})"
+            )
         self.num_attention_heads = num_attention_heads
         self.attention_head_size = hidden_size // num_attention_heads
         self.all_head_size = self.num_attention_heads * self.attention_head_size

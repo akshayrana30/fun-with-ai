@@ -1,5 +1,5 @@
 import torch
-from bert import BERT, BERTForPreTraining
+from bert import BERT, BERTForPreTraining, MultiHeadAttention, BERTEmbeddings, TransformerEncoderLayer
 
 
 def demo_basic_bert():
@@ -99,8 +99,6 @@ def demo_attention_visualization():
     print("Demo: Attention Mechanism")
     print("=" * 60)
     
-    from bert import MultiHeadAttention
-    
     hidden_size = 768
     num_attention_heads = 12
     batch_size = 1
@@ -128,8 +126,6 @@ def demo_model_components():
     print("=" * 60)
     print("Demo: BERT Components")
     print("=" * 60)
-    
-    from bert import BERTEmbeddings, TransformerEncoderLayer
     
     vocab_size = 30522
     hidden_size = 768
