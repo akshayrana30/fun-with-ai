@@ -171,6 +171,7 @@ class BERT(nn.Module):
                  max_position_embeddings=512, type_vocab_size=2, dropout_prob=0.1):
         super(BERT, self).__init__()
         
+        self.hidden_size = hidden_size
         self.embeddings = BERTEmbeddings(vocab_size, hidden_size, 
                                         max_position_embeddings, 
                                         type_vocab_size, dropout_prob)
@@ -207,7 +208,7 @@ class BERTForMaskedLM(nn.Module):
     def __init__(self, bert_model, vocab_size):
         super(BERTForMaskedLM, self).__init__()
         self.bert = bert_model
-        self.mlm_head = nn.Linear(bert_model.embeddings.token_embeddings.embedding_dim, vocab_size)
+        self.mlm_head = nn.Linear(bert_model.hidden_size, vocab_size)
         
     def forward(self, input_ids, token_type_ids=None, attention_mask=None):
         encoder_output, _ = self.bert(input_ids, token_type_ids, attention_mask)
@@ -221,7 +222,7 @@ class BERTForNextSentencePrediction(nn.Module):
     def __init__(self, bert_model):
         super(BERTForNextSentencePrediction, self).__init__()
         self.bert = bert_model
-        self.nsp_head = nn.Linear(bert_model.pooler.dense.out_features, 2)
+        self.nsp_head = nn.Linear(bert_model.hidden_size, 2)
         
     def forward(self, input_ids, token_type_ids=None, attention_mask=None):
         _, pooled_output = self.bert(input_ids, token_type_ids, attention_mask)
