@@ -25,10 +25,11 @@ The RLHF process typically involves three main stages:
 
 ## Scripts in this Folder
 
-1. **`1_reward_model.py`** - Demonstrates how to create and train a simple reward model
-2. **`2_ppo_trainer.py`** - Shows how PPO (Proximal Policy Optimization) works for RL fine-tuning
-3. **`3_rlhf_pipeline.py`** - Puts it all together in a complete RLHF pipeline example
-4. **`requirements.txt`** - Required Python packages
+1. **`0_introduction.py`** - Interactive introduction to RLHF (no dependencies required - start here!)
+2. **`1_reward_model.py`** - Demonstrates how to create and train a simple reward model
+3. **`2_ppo_trainer.py`** - Shows how PPO (Proximal Policy Optimization) works for RL fine-tuning
+4. **`3_rlhf_pipeline.py`** - Puts it all together in a complete RLHF pipeline example
+5. **`requirements.txt`** - Required Python packages
 
 ## Key Concepts
 
@@ -55,12 +56,17 @@ The RLHF process typically involves three main stages:
 
 ## Getting Started
 
-1. Install dependencies:
+1. Start with the introduction (no installation needed):
+   ```bash
+   python 0_introduction.py
+   ```
+
+2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-2. Run the scripts in order:
+3. Run the scripts in order:
    ```bash
    python 1_reward_model.py
    python 2_ppo_trainer.py
