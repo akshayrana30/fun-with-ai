@@ -1,0 +1,21 @@
+# RLHF Learning Scripts - Requirements
+# Install with: pip install -r requirements.txt
+
+# Core deep learning framework
+torch>=2.0.0
+
+# Transformers library for pre-trained models
+transformers>=4.30.0
+
+# NumPy for numerical operations
+numpy>=1.24.0
+
+# Optional but recommended for production RLHF:
+# trl>=0.4.0  # Transformer Reinforcement Learning by Hugging Face
+# accelerate>=0.20.0  # For distributed training
+# datasets>=2.12.0  # For dataset management
+# peft>=0.3.0  # Parameter-Efficient Fine-Tuning (LoRA, etc.)
+
+# For visualization (optional)
+# matplotlib>=3.7.0
+# tensorboard>=2.13.0
